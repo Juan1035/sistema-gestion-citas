@@ -1,0 +1,298 @@
+:root {
+    --color-primario: #0b1f33;
+    --color-primario-suave: #163752;
+    --color-acento: #20c9c3;
+    --color-acento-oscuro: #118d89;
+    --color-acento-claro: #e4fbfa;
+    --color-fondo: #f4f7fa;
+    --color-superficie: #ffffff;
+    --color-texto: #17212b;
+    --color-texto-suave: #5f6f7d;
+    --color-borde: #dbe4ea;
+    --sombra-suave: 0 12px 32px rgba(11, 31, 51, 0.08);
+    --radio: 1rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+main {
+    min-height: calc(100vh - 160px);
+}
+
+.navbar-sistema {
+    background: var(--color-primario);
+    box-shadow: 0 8px 24px rgba(11, 31, 51, 0.16);
+}
+
+.navbar-sistema .navbar-brand,
+.navbar-sistema .nav-link {
+    color: #ffffff;
+}
+
+.navbar-sistema .navbar-brand:hover,
+.navbar-sistema .navbar-brand:focus {
+    color: #ffffff;
+}
+
+.navbar-sistema .nav-link {
+    border-radius: .7rem;
+    padding-inline: .9rem;
+}
+
+.navbar-sistema .nav-link:hover,
+.navbar-sistema .nav-link:focus,
+.navbar-sistema .nav-link.active {
+    background: rgba(32, 201, 195, .18);
+    color: #ffffff;
+}
+
+.marca-icono {
+    display: grid;
+    place-items: center;
+    width: 2.55rem;
+    height: 2.55rem;
+    border-radius: .8rem;
+    background: var(--color-acento);
+    color: var(--color-primario);
+}
+
+.marca-subtitulo {
+    color: #b9c8d4;
+    font-size: .72rem;
+}
+
+.hero-sistema {
+    position: relative;
+    background: var(--color-primario);
+    color: #ffffff;
+    border-radius: 1.35rem;
+    box-shadow: var(--sombra-suave);
+    overflow: hidden;
+}
+
+.hero-sistema::after {
+    content: "";
+    position: absolute;
+    width: 19rem;
+    height: 19rem;
+    right: -8rem;
+    top: -8rem;
+    border-radius: 50%;
+    background: rgba(32, 201, 195, .12);
+}
+
+.hero-sistema > * {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-sistema .texto-secundario {
+    color: #c9d6df;
+}
+
+.etiqueta-acento {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    border-radius: 999px;
+    background: rgba(32, 201, 195, .14);
+    color: #79eee9;
+    padding: .45rem .8rem;
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.btn-acento {
+    --bs-btn-color: var(--color-primario);
+    --bs-btn-bg: var(--color-acento);
+    --bs-btn-border-color: var(--color-acento);
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-hover-bg: var(--color-acento-oscuro);
+    --bs-btn-hover-border-color: var(--color-acento-oscuro);
+    --bs-btn-focus-shadow-rgb: 32, 201, 195;
+    font-weight: 700;
+}
+
+.btn-contorno-claro {
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, .5);
+}
+
+.btn-contorno-claro:hover,
+.btn-contorno-claro:focus {
+    color: var(--color-primario);
+    background: #ffffff;
+}
+
+.btn-primario {
+    --bs-btn-color: #ffffff;
+    --bs-btn-bg: var(--color-primario);
+    --bs-btn-border-color: var(--color-primario);
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-hover-bg: var(--color-primario-suave);
+    --bs-btn-hover-border-color: var(--color-primario-suave);
+    font-weight: 700;
+}
+
+.tarjeta-sistema {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+}
+
+.tarjeta-metrica {
+    height: 100%;
+}
+
+.icono-tarjeta {
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: .85rem;
+    background: var(--color-acento-claro);
+    color: var(--color-acento-oscuro);
+    font-size: 1.2rem;
+}
+
+.texto-suave {
+    color: var(--color-texto-suave);
+}
+
+.titulo-seccion {
+    color: var(--color-primario);
+    font-weight: 750;
+}
+
+.form-control,
+.form-select {
+    border-color: var(--color-borde);
+    border-radius: .8rem;
+    padding: .75rem .9rem;
+    color: var(--color-texto);
+    background-color: #ffffff;
+}
+
+.form-control::placeholder {
+    color: #8795a1;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 .22rem rgba(32, 201, 195, .16);
+}
+
+.form-label {
+    color: var(--color-primario);
+    font-weight: 650;
+}
+
+.form-text {
+    color: var(--color-texto-suave);
+}
+
+.tabla-citas {
+    margin-bottom: 0;
+}
+
+.tabla-citas thead th {
+    background: #eaf0f4;
+    color: var(--color-primario);
+    border-bottom: 0;
+    white-space: nowrap;
+}
+
+.tabla-citas td {
+    color: var(--color-texto);
+    vertical-align: middle;
+}
+
+.tabla-citas tbody tr:hover td {
+    background: #f8fbfc;
+}
+
+.badge-estado {
+    display: inline-block;
+    border-radius: 999px;
+    padding: .45rem .7rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.estado-pendiente {
+    background: #fff4d8;
+    color: #805a00;
+}
+
+.estado-confirmada {
+    background: #dff8ee;
+    color: #126349;
+}
+
+.estado-completada {
+    background: #e5edff;
+    color: #294f9b;
+}
+
+.estado-cancelada {
+    background: #fde7e7;
+    color: #8b2727;
+}
+
+.bloque-acento-claro {
+    background: var(--color-acento-claro);
+    color: var(--color-texto);
+    border: 1px solid #bcebe8;
+    border-radius: var(--radio);
+}
+
+.encabezado-pagina {
+    padding-block: 2.25rem 1.25rem;
+}
+
+.numero-404 {
+    color: var(--color-primario);
+    font-size: clamp(5rem, 16vw, 9rem);
+    font-weight: 850;
+    line-height: .9;
+    letter-spacing: -.06em;
+}
+
+.pie-sistema {
+    background: var(--color-primario);
+    color: #ffffff;
+}
+
+.pie-secundario {
+    color: #b9c8d4;
+}
+
+@media (max-width: 767.98px) {
+    .hero-sistema {
+        border-radius: 1rem;
+    }
+
+    .navbar-sistema .nav-link {
+        margin-top: .3rem;
+    }
+
+    .acciones-tabla {
+        min-width: 7.5rem;
+    }
+}
