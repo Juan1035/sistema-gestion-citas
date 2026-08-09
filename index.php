@@ -28,3 +28,13 @@ switch ($accion) {
         require 'app/Views/error404.php';
         break;
 }
+
+conectar();
+
+if($conexion) {
+    echo "¡Conexión exitosa a MySQL lista para usarse!";
+}
+
+// Aquí luego cargarás tus rutas (routers/) y tu aplicación (app/)
+?>
+
