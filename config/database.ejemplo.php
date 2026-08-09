@@ -1,20 +1,30 @@
 <?php
-class Database {
-    private $host = "localhost";
-    private $db_name = "sistema_gestion_citas";
-    private $username = "NOMBRE"; 
-    private $password = "CONTRASEÑA";     
-    public $conn;
 
+class Database {
     public function conectar() {
-        $this->conn = null;
+        $host = "localhost";
+        $usuario = "root";
+        $password = "";
+        $base_datos = "sistema_gestion_citas";
+
         try {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exception) {
-            echo "Error de conexión: " . $exception->getMessage();
+            $conexion = new PDO(
+                "mysql:host=$host;dbname=$base_datos;charset=utf8mb4",
+                $usuario,
+                $contraseña
+            );
+
+            $conexion->setAttribute(
+                PDO::ATTR_ERRMODE,
+                PDO::ERRMODE_EXCEPTION
+            );
+
+            return $conexion;
+
+        } catch (PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
         }
-        return $this->conn;
     }
 }
+
 ?>
