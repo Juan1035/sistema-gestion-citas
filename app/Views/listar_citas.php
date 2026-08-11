@@ -84,9 +84,11 @@ require __DIR__ . '/encabezado.php';
                                     <a class="btn btn-sm btn-outline-primary" href="index.php?accion=editar&id=<?= urlencode((string) ($cita['id'] ?? '')) ?>" aria-label="Editar cita">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger" type="button" aria-label="Eliminar cita">
+                                    <a
+                                        class="btn btn-sm btn-outline-danger" href="index.php?accion=eliminar&id=<?= urlencode((string) ($cita['id'] ?? '')) ?>" aria-label="Eliminar cita"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita?');"> 
                                         <i class="bi bi-trash3"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -19,7 +19,7 @@ $accionActual = $_GET['accion'] ?? 'inicio';
         <a class="navbar-brand d-flex align-items-center gap-2" href="index.php?accion=inicio">
             <span class="marca-icono" aria-hidden="true"><i class="bi bi-calendar2-check"></i></span>
             <span>
-                <strong class="d-block">CitaPro</strong>
+                <strong class="d-block">Sistema de Gestión de Citas.</strong>
                 <small class="marca-subtitulo">Gestión inteligente</small>
             </span>
         </a>

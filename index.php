@@ -16,6 +16,10 @@ switch ($accion) {
         $controlador->registrar();
         break;
 
+    case 'guardar':
+        $controlador->guardar();
+        break;
+
     case 'listar':
         $controlador->listar();
         break;
@@ -24,17 +28,17 @@ switch ($accion) {
         $controlador->editar();
         break;
 
+    case 'actualizar':
+    $controlador->actualizar();
+    break;
+
+    case 'eliminar':
+    $controlador->eliminar();
+    break;
+
     default:
         require 'app/Views/error404.php';
         break;
 }
 
-conectar();
-
-if($conexion) {
-    echo "¡Conexión exitosa a MySQL lista para usarse!";
-}
-
-// Aquí luego cargarás tus rutas (routers/) y tu aplicación (app/)
 ?>
-
