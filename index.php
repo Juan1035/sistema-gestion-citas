@@ -16,6 +16,14 @@ switch ($accion) {
         $controlador->registrar();
         break;
 
+        case 'google':
+        $controlador->google();
+        break;
+
+    case 'googleCallback':
+        $controlador->googleCallback();
+        break;
+
     case 'guardar':
         $controlador->guardar();
         break;
@@ -29,12 +37,12 @@ switch ($accion) {
         break;
 
     case 'actualizar':
-    $controlador->actualizar();
-    break;
+        $controlador->actualizar();
+        break;
 
     case 'eliminar':
-    $controlador->eliminar();
-    break;
+        $controlador->eliminar();
+        break;
 
     default:
         require 'app/Views/error404.php';

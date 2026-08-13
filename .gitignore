@@ -1,1 +1,8 @@
-
+/vendor/
+/.env
+/credentials/
+/client_secret*.json
+/config/google/*.json
+/storage/google-token.json
+# Credenciales de Twilio
+config/twilio/credentials.php

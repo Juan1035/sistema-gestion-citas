@@ -28,7 +28,7 @@ require __DIR__ . '/encabezado.php';
     <div class="row g-4">
         <div class="col-xl-8">
             <div class="tarjeta-sistema p-4 p-lg-5">
-                <<form action="index.php?accion=actualizar" method="post">
+                <form action="index.php?accion=actualizar" method="post">
                     <input type="hidden" name="id" value="<?= htmlspecialchars((string) ($cita['id'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
 
                     <div class="row g-4">
@@ -44,7 +44,7 @@ require __DIR__ . '/encabezado.php';
 
                         <div class="col-md-6">
                             <label class="form-label" for="correo">Correo</label>
-                            <input class="form-control" type="email" id="correo" name="correo" value="<?= htmlspecialchars((string) ($cita['correo'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" required>
+                            <input class="form-control" type="email" id="correo" name="correo" value="<?= htmlspecialchars((string) ($cita['correo'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                         </div>
 
                         <div class="col-md-6">

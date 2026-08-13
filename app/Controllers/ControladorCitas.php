@@ -5,9 +5,33 @@ declare(strict_types=1);
 class ControladorCitas
 {
     public function inicio(): void
-    {
-        require __DIR__ . '/../Views/inicio.php';
+{
+    require_once __DIR__ . '/../Models/ModeloCitas.php';
+
+    $modelo = new ModeloCitas();
+
+    $citas = $modelo->obtenerTodas();
+
+    $totalCitas = count($citas);
+
+    $hoy = date('Y-m-d');
+
+    $citasHoy = 0;
+    $proximasCitas = 0;
+
+    foreach ($citas as $cita) {
+
+        if ($cita['fecha'] === $hoy) {
+            $citasHoy++;
+        }
+
+        if ($cita['fecha'] > $hoy) {
+            $proximasCitas++;
+        }
     }
+
+    require __DIR__ . '/../Views/inicio.php';
+}
 
     public function registrar(): void
     {
@@ -73,7 +97,7 @@ class ControladorCitas
     // Cargar el modelo
     require_once __DIR__ . '/../Models/ModeloCitas.php';
 
-$modelo = new ModeloCitas();
+    $modelo = new ModeloCitas();
 
     if ($modelo->existeCita($fecha, $hora)) {
       $error = 'La fecha y hora seleccionadas ya están ocupadas. Por favor, elige otro horario.';
@@ -81,10 +105,53 @@ $modelo = new ModeloCitas();
       return;
 }
 
-    $modelo->guardar($datos);
+      // Guardar la cita en la base de datos
+        $idCita = $modelo->guardar($datos);
 
-       header('Location: index.php?accion=listar');
-       exit;
+    if ($idCita === false) {
+            $error = 'No se pudo guardar la cita. Inténtalo nuevamente.';
+            require __DIR__ . '/../Views/registrar_cita.php';
+            return;
+        }
+
+        // Enviar recordatorio mediante Twilio WhatsApp
+        require_once __DIR__ . '/../Services/TwilioService.php';
+
+        try {
+            $twilio = new TwilioService();
+
+            $twilio->enviarRecordatorio($datos);
+
+        } catch (Exception $e) {
+            // La cita ya fue guardada en MySQL.
+            // Si Twilio falla, no eliminamos la cita.
+        }
+
+
+        // Crear el evento en Google Calendar
+        require_once __DIR__ . '/../Services/GoogleCalendarService.php';
+
+        try {
+            $google = new GoogleCalendarService();
+
+            $googleEventId = $google->crearEvento($datos);
+
+            // Guardar el ID del evento de Google en la cita
+            $modelo->guardarGoogleEventId(
+                $idCita,
+                $googleEventId
+            );
+
+        } catch (Exception $e) {
+
+            // La cita ya fue guardada en MySQL.
+            // Si Google Calendar falla, no eliminamos la cita.
+        }
+
+
+        // Volver a la lista
+        header('Location: index.php?accion=listar');
+        exit;
 
     }
 
@@ -219,25 +286,65 @@ public function actualizar(): void
 
     // Preparar los datos
     $datos = [
-        'nombre_cliente' => $_POST['nombre_cliente'],
-        'telefono' => $_POST['telefono'],
-        'correo' => $_POST['correo'] ?? null,
-        'servicio' => $_POST['servicio'],
-        'fecha' => $fecha,
-        'hora' => $hora,
-        'notas_adicionales' => $_POST['notas_adicionales'] ?? null
-    ];
+    'nombre_cliente' => $_POST['nombre_cliente'],
+    'telefono' => $_POST['telefono'],
+    'correo' => $_POST['correo'] ?? null,
+    'servicio' => $_POST['servicio'],
+    'fecha' => $fecha,
+    'hora' => $hora,
+    'notas_adicionales' => $_POST['notas_adicionales'] ?? null
+];
 
-    // Actualizar la cita
-    $modelo->actualizar($id, $datos);
+
+    // Actualizar la cita en la base de datos
+    $actualizado = $modelo->actualizar($id, $datos);
+
+    if (!$actualizado) {
+    $error = 'No se pudo actualizar la cita. Inténtalo nuevamente.';
+
+    $cita = $modelo->obtenerPorId($id);
+
+    require __DIR__ . '/../Views/editar_cita.php';
+    return;
+}
+
+
+    // Obtener la cita actualizada para conocer su google_event_id
+    $citaActualizada = $modelo->obtenerPorId($id);
+
+
+    // Actualizar el evento correspondiente en Google Calendar
+if (
+        $citaActualizada !== null &&
+        !empty($citaActualizada['google_event_id'])
+         )
+    
+    {
+        require_once __DIR__ . '/../Services/GoogleCalendarService.php';
+
+        try {
+            $google = new GoogleCalendarService();
+
+            $google->actualizarEvento(
+                $citaActualizada['google_event_id'],
+                $citaActualizada
+            );
+
+        } catch (Exception $e) {
+            // La cita ya fue actualizada en MySQL.
+            // Si Google Calendar falla, no se pierde la modificación.
+        }
+    }
+
 
     // Volver a la lista
     header('Location: index.php?accion=listar');
     exit;
+
 }
 
 
-    public function eliminar(): void
+   public function eliminar(): void
 {
     if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
         header('Location: index.php?accion=listar');
@@ -250,11 +357,77 @@ public function actualizar(): void
 
     $modelo = new ModeloCitas();
 
+
+    // Obtener la cita antes de eliminarla
+    $cita = $modelo->obtenerPorId($id);
+
+    if ($cita === null) {
+        header('Location: index.php?accion=listar');
+        exit;
+    }
+
+
+    // Eliminar el evento de Google Calendar si existe
+    if (!empty($cita['google_event_id'])) {
+
+        require_once __DIR__ . '/../Services/GoogleCalendarService.php';
+
+        try {
+            $google = new GoogleCalendarService();
+
+            $google->eliminarEvento(
+                $cita['google_event_id']
+            );
+
+        } catch (Exception $e) {
+            // Si Google Calendar falla, no impedimos
+            // que la cita sea eliminada de MySQL.
+        }
+    }
+
+
+    // Eliminar la cita de la base de datos
     $modelo->eliminar($id);
+
 
     header('Location: index.php?accion=listar');
     exit;
 }
+
+public function google(): void
+{
+    require_once __DIR__ . '/../Services/GoogleCalendarService.php';
+
+    $google = new GoogleCalendarService();
+
+    header('Location: ' . $google->obtenerUrlAutorizacion());
+    exit;
+}
+
+
+public function googleCallback(): void
+{
+    if (!isset($_GET['code'])) {
+        die('No se recibió el código de autorización de Google.');
+    }
+
+    require_once __DIR__ . '/../Services/GoogleCalendarService.php';
+
+    try {
+        $google = new GoogleCalendarService();
+
+        $google->procesarCallback($_GET['code']);
+
+        echo '<h2>Google Calendar conectado correctamente.</h2>';
+        echo '<p>Ya puedes volver al Sistema de Citas.</p>';
+        echo '<a href="index.php?accion=inicio">Volver al inicio</a>';
+
+    } catch (Exception $e) {
+        echo '<h2>Error al conectar Google Calendar</h2>';
+        echo '<p>' . htmlspecialchars($e->getMessage()) . '</p>';
+    }
+}
+
 }
 
 ?>

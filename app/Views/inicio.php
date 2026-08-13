@@ -47,7 +47,7 @@ require __DIR__ . '/encabezado.php';
                 <div class="d-flex justify-content-between align-items-start gap-3">
                     <div>
                         <p class="texto-suave mb-2">Citas registradas</p>
-                        <p class="display-6 fw-bold mb-1">0</p>
+                        <p class="display-6 fw-bold mb-1"> <?= $totalCitas ?></p>
                         <small class="texto-suave">Total en la agenda</small>
                     </div>
                     <span class="icono-tarjeta"><i class="bi bi-calendar-check"></i></span>
@@ -59,7 +59,7 @@ require __DIR__ . '/encabezado.php';
                 <div class="d-flex justify-content-between align-items-start gap-3">
                     <div>
                         <p class="texto-suave mb-2">Citas de hoy</p>
-                        <p class="display-6 fw-bold mb-1">0</p>
+                        <p class="display-6 fw-bold mb-1"><?= $citasHoy ?></p>
                         <small class="texto-suave">Agenda del día</small>
                     </div>
                     <span class="icono-tarjeta"><i class="bi bi-calendar-day"></i></span>
@@ -71,7 +71,7 @@ require __DIR__ . '/encabezado.php';
                 <div class="d-flex justify-content-between align-items-start gap-3">
                     <div>
                         <p class="texto-suave mb-2">Próximas citas</p>
-                        <p class="display-6 fw-bold mb-1">0</p>
+                        <p class="display-6 fw-bold mb-1"><?= $proximasCitas ?></p>
                         <small class="texto-suave">Reservas programadas</small>
                     </div>
                     <span class="icono-tarjeta"><i class="bi bi-clock-history"></i></span>
